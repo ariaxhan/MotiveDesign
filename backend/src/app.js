@@ -1,13 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const analyzeRoute = require('./routes/analyze');
+const analyzeRouter = require('./routes/analyze');
 
 const app = express();
+const port = 3000;
 
-app.use(bodyParser.json());
-app.use('/api/analyze', analyzeRoute);
+// Increase the payload size limit
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.use('/api/analyze', analyzeRouter);
+
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
 });
